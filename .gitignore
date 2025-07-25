@@ -5,6 +5,7 @@ sync.sh
 .stfolder
 
 # Hidden
+bugbounty
 cwe-cruise
 cwe-screener
 cwe-pte-screener
