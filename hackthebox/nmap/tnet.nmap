@@ -1,0 +1,4 @@
+# Nmap 7.95 scan initiated Tue Oct 22 16:51:37 2024 as: nmap -sn -oA tnet 10.129.2.0/24
+Nmap scan report for 10.129.2.49
+Host is up (0.033s latency).
+# Nmap done at Tue Oct 22 16:51:44 2024 -- 256 IP addresses (1 host up) scanned in 7.53 seconds

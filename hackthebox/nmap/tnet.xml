@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE nmaprun>
+<?xml-stylesheet href="file:///nix/store/3xnjmwzggddzxb6wgg56skpznbrcxqb6-nmap-7.95/bin/../share/nmap/nmap.xsl" type="text/xsl"?>
+<!-- Nmap 7.95 scan initiated Tue Oct 22 16:51:37 2024 as: nmap -sn -oA tnet 10.129.2.0/24 -->
+<nmaprun scanner="nmap" args="nmap -sn -oA tnet 10.129.2.0/24" start="1729630297" startstr="Tue Oct 22 16:51:37 2024" version="7.95" xmloutputversion="1.05">
+<verbose level="0"/>
+<debugging level="0"/>
+<host><status state="up" reason="syn-ack" reason_ttl="0"/>
+<address addr="10.129.2.49" addrtype="ipv4"/>
+<hostnames>
+</hostnames>
+<times srtt="32685" rttvar="24912" to="132333"/>
+</host>
+<runstats><finished time="1729630304" timestr="Tue Oct 22 16:51:44 2024" summary="Nmap done at Tue Oct 22 16:51:44 2024; 256 IP addresses (1 host up) scanned in 7.53 seconds" elapsed="7.53" exit="success"/><hosts up="1" down="255" total="256"/>
+</runstats>
+</nmaprun>
