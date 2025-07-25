@@ -1,12 +1,5 @@
-# Dots & configs
-venv
-sync.sh
 .obsidian
 .stfolder
-
-# Hidden
-bugbounty
-cwe-cruise
-cwe-screener
-cwe-pte-screener
-usafa-scrimmage
+local
+venv
+sync.sh
