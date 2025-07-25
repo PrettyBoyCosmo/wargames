@@ -1,5 +1,6 @@
-# Dots
+# Dots & configs
 venv
+sync.sh
 .obsidian
 .stfolder
 
@@ -8,38 +9,3 @@ cwe-cruise
 cwe-screener
 cwe-pte-screener
 usafa-scrimmage
-
-# Testing
-advent-of-code
-binex_tuts
-buckeye
-bugbounty
-cole-ellis
-crackmes
-ctfTemplate.tgz
-cyber-red-zone
-cyberx
-defcon
-hackthebox
-hackthissite
-hacktivitycon
-hackwarz
-hivestorm
-idekctf
-kitctf
-koth
-leetcode
-maple-ctf
-nahamcon
-ncl-cyberskyline
-ncx
-nightmare
-nsa-codebreakers
-parson
-pcdc
-picoctf
-ropemporium
-securinets
-shmoocon
-space-heroes
-tryhackme
