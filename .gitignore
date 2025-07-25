@@ -3,4 +3,5 @@
 local
 venv
 **/hydra.restore*
+**/__pycache__/
 sync.sh
