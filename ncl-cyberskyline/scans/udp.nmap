@@ -1,0 +1,12 @@
+# Nmap 7.80 scan initiated Sat Sep 14 14:18:44 2024 as: nmap -vv -sU -oN scans/udp.nmap ports.cityinthe.cloud
+Nmap scan report for ports.cityinthe.cloud (34.199.237.244)
+Host is up, received echo-reply ttl 48 (0.021s latency).
+rDNS record for 34.199.237.244: ec2-34-199-237-244.compute-1.amazonaws.com
+Scanned at 2024-09-14 14:18:44 EDT for 21s
+Not shown: 999 open|filtered ports
+Reason: 999 no-responses
+PORT  STATE SERVICE REASON
+7/udp open  echo    udp-response ttl 48
+
+Read data files from: /usr/bin/../share/nmap
+# Nmap done at Sat Sep 14 14:19:05 2024 -- 1 IP address (1 host up) scanned in 21.34 seconds
