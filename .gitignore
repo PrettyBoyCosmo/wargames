@@ -1,7 +1,18 @@
+# Dotfiles
 .obsidian
 .stfolder
+
+# Misc.
 local
-venv
-**/hydra.restore*
-**/__pycache__/
 sync.sh
+**/hydra.restore*
+
+# Python
+venv
+**/__pycache__/
+
+# Ghidra project files
+ghidra.gpr
+ghidra.lock
+ghidra.lock~
+ghidra.rep/
