@@ -1,82 +1,141 @@
 // Title:       linked-ops.c
-// Description: Cole Ellis serialization challenge
+// Description: Linked ops implementation file
 // Author:      bluecosmo
-
-// flag{TjWc9AY)')G\A.Bf=N3pHP9Ej=3@M|ly4M;8KJOJgIT/ch8e}
 
 #include <stdio.h>
 #include <stdint.h>
+#include <string.h>
 #include <stdlib.h>
 
-#include "ll.h"
+#include "linked-ops.h"
 
-int readByte(void *buffer, size_t size, FILE *fp) {
-    if (fread(buffer, size, 1, fp) == 0) {
-      perror("fread");
-      return EXIT_FAILURE;
-    }
-    return EXIT_SUCCESS;
+// Make new node for linked list
+LLNode *newNode(uint8_t value) {
+  LLNode *new_node = (LLNode*) malloc(sizeof(LLNode));
+  if (new_node != NULL) {
+    new_node->value = value;
+    new_node->next = NULL;
+  }
+  return new_node;
 }
 
-int main() {
+// [0] Add to back
+LLNode *addToBack(uint8_t value, LLNode *head) {
 
-  // Attempt to open data file
-  FILE *fp = fopen("./data.bin", "rb");
-  if (fp == NULL) {
-    perror("fopen");
-    exit(EXIT_FAILURE);
+  LLNode *new_node = newNode(value);
+  if (head == NULL) return new_node;
+
+  LLNode *curr = head;
+  while(curr->next != NULL) { curr = curr->next; }
+  curr->next = new_node;
+  return head;
+}
+
+// [1] Add linked list node to front
+LLNode *addToFront(uint8_t value, LLNode *head) {
+  LLNode *new_node = newNode(value);
+  if (head == NULL) return new_node;
+  new_node->next = head;
+  return new_node;
+}
+
+// [2] Insert node at specific index
+LLNode *insertAt(uint8_t value, uint16_t index, LLNode *head) {
+
+  LLNode *new_node = newNode(value);
+  if (head == NULL) return new_node;
+  if (index == 0) return addToFront(value, head);
+
+  uint16_t i = 0;
+  LLNode *curr = head;
+  LLNode *prev = head;
+  while (curr != NULL) {
+
+    if (i == index) {
+      prev->next = new_node;
+      new_node->next = curr;
+      return head;
+    }
+
+    prev = curr;
+    curr = curr->next;
+    i++;
+  }
+  return addToBack(value, head);
+  /*prev->next = new_node;*/
+  /*return head;*/
+}
+
+// [3] Remove node from end of linked list
+LLNode *removeEnd(LLNode *head) {
+  if (head == NULL) return NULL;
+  if (head->next == NULL) {
+    free(head);
+    return NULL;
+  }
+  LLNode *curr = head;
+  LLNode *prev = head;
+  while (curr->next != NULL) {
+    prev = curr;
+    curr = curr->next;
+  }
+  free(curr);
+  prev->next = NULL;
+  return head;
+}
+
+// [4] Remove node from front of linked list
+LLNode *removeFront(LLNode *head) {
+  if (head == NULL) return NULL;
+  LLNode *new_head = head->next;
+  free(head);
+  return new_head;
+}
+
+// [5] Remove node from specific index
+// NOTE: removes last node if out of bounds
+LLNode *removeAt(uint16_t index, LLNode *head) {
+  if (head == NULL) return NULL;
+  if (index == 0) return removeFront(head);
+
+  uint16_t i = 0;
+  LLNode *curr = head;
+  LLNode *prev = head;
+
+  while (curr->next != NULL) {
+    if (i == index) {
+      prev->next = curr->next;
+      free(curr);
+      return head;
+    }
+
+    prev = curr;
+    curr = curr->next;
+    i++;
   }
 
-  Node* LL = NULL;
-  uint8_t opcode, arg2;
-  uint16_t arg1;
+  return removeEnd(head);
+}
 
-  // Read and execute opcodes
-  puts("[*] Reading opcode...");
-  while (readByte((uint8_t *)&opcode, sizeof(uint8_t), fp) != EXIT_FAILURE) {
-    printf("[+] Opcode found: %d\n", (int) opcode);
-
-    // Add to back
-    if (opcode == 0) {
-      readByte((uint8_t *)&arg2, sizeof(uint8_t), fp);
-      LL = add2back(arg2, LL);
-    }
-
-    // Add to front
-    else if (opcode == 1) {
-      readByte((uint8_t *)&arg2, sizeof(uint8_t), fp);
-      LL = add2front(arg2, LL);
-    }
-
-    // Insert node
-    else if (opcode == 2) {
-      readByte((uint16_t *)&arg1, sizeof(uint16_t), fp);
-      readByte((uint8_t *) &arg2, sizeof(uint8_t), fp);
-      LL = insertNode(arg2, arg1, LL);
-    }
-
-    // Remove last node
-    else if (opcode == 3)
-      LL = removeLastNode(LL);
-
-    // Remove first node
-    else if (opcode == 4)
-      LL = removeFirstNode(LL);
-
-    // Remove node from index
-    else if (opcode == 5) {
-      readByte((uint16_t *)&arg1, sizeof(uint16_t), fp);
-      LL = popNode(arg1, LL);
-    }
-
-    printf("arg 1: %x (hex)\n", arg1);
-    printf("arg 2: %x (hex)\n", arg2);
-
-    printLL(LL);
+// Print linked list nodes
+void printLL(LLNode *head) {
+  LLNode *curr = head;
+  while (curr != NULL) {
+    printf("%02x -> ", curr->value);
+    curr = curr->next;
   }
-  printLL(LL);
+  printf("NULL\n");
+  return;
+}
 
-  // Clean & exit
-  fclose(fp);
-  return EXIT_SUCCESS;
+// Print flag
+void printFlag(LLNode *head) {
+  LLNode *curr = head;
+  printf("flag{");
+  while (curr != NULL) {
+    printf("%c", curr->value);
+    curr = curr->next;
+  }
+  printf("}\n");
+  return;
 }
