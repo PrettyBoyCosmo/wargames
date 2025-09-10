@@ -55,7 +55,7 @@ int main(void) {
       printf("[!] ERROR: Opocode 0x%02x does not exist.", opcode);
     }
 
-    printf("Index: 0x%x\n", ftell(fp));
+    printf("Index: 0x%lx\n", ftell(fp));
     printf("OP: 0x%02x\n", opcode);
     printf("CH: 0x%02x (%c)\n", character, character);
     printf("IX: 0x%02x\n", index);
