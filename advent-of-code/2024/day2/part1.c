@@ -1,68 +1,66 @@
 // Title:       part1.c
-// Description: Day2 AoC part1
+// Description: Day 2 AoC Part 1
 // Author:      bluecosmo
 
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <stdbool.h>
 
-int iterate_nums(char *line_read) {
-
-  char *num_from_file = strtok(line_read, " ");
-
-  int prev_num = 0;
-  int curr_num = 0;
-  int valid_reports = 0;
-  int direction = 0;
-  int i = 0;
-
-  for (i = 0; num_from_file; i++) {
-
-    curr_num = atoi(num_from_file);
-
-    printf("[%d]: c:%d p:%d\n", i, curr_num, prev_num);
-
-    if (i > 0) {
-
-      int diff = curr_num - prev_num;
-
-      if (diff < -2 || diff > 2) { valid_reports = 0; break; }
-
-      if (diff != 0) {
-
-        if (direction == 0) {
-          if (diff > 0) direction = 1;
-          else direction = -1;
-        }
-
-        if ((direction > 0 && diff > 0) ||
-            (direction < 0 && diff < 0))
-          valid_reports++;
-      }
-    }
-    prev_num = curr_num;
-    num_from_file = strtok(NULL, " ");
-  }
-  return valid_reports;
+bool checkReport(int *nums) {
 }
 
 int main(void) {
 
   FILE *fp = fopen("./input", "r");
   if (!fp) {
-    perror("./input");
+    perror("fopen");
     return EXIT_FAILURE;
   }
 
   char *line_read = NULL;
   size_t line_length = 0;
-  int reports = 0;
+
+  int safe_reports = 0;
 
   while (getline(&line_read, &line_length, fp) != EOF) {
-    reports += iterate_nums(line_read);
+
+    char *num_read = strtok(line_read, " ");
+    int curr_num = 0;
+    int prev_num = curr_num;
+    int direction = 0;
+
+    for (int i = 0; num_read; i++) {
+
+      printf("PREV: %d\n", prev_num);
+      printf("CURR: %d\n", curr_num);
+
+      curr_num = atoi(num_read);
+
+      if (i > 0) {
+
+        int difference = prev_num - curr_num;
+
+        if (direction == 0) {
+          if (prev_num > curr_num) direction = -1;
+          else direction = +1;
+        }
+
+        if (direction == 1 && (0 < difference && 2 >= difference)) {
+          safe_reports++;
+        }
+
+        else if (direction == -1 && (0 > difference && -2 <= difference)) {
+          safe_reports++;
+        }
+
+        prev_num = curr_num;
+        num_read = strtok(NULL, " ");
+      }
+    }
   }
 
-  printf("%d\n", reports);
+  printf("%d\n", safe_reports);
   return EXIT_SUCCESS;
 }
 

